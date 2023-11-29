@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: true
+
+spring:
+  application:
+    name: RandomNumberGateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+      - id: RandomNumberService
+        uri: lb://RandomNumberService
+        predicates:
+          - Method=GET
+
+
+# No Eureka Server
+#spring:
+#  cloud:
+#      routes:
+#        - id: RandomNumberService
+#          uri: http://localhost:8082
+#          predicates:
+#            - Method=GET
+
+
+logging:
+  level:
+    org.springframework.web.HttpLogging: TRACE
+    reactor.netty.http.server: DEBUG
+    reactor.netty.http.client: DEBUG
