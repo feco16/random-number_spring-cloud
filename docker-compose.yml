@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+
+  random-number-service:
+    image: random-number-service:latest
+    restart: always
+    deploy:
+      replicas: 3
+    depends_on:
+      - eureka-server
+
+  eureka-server:
+    image: eureka-server:latest
+    container_name: eureka
+    hostname: eureka
+    restart: always
+    expose:
+      - "8761"
+    ports:
+      - "8761:8761"
+
+  api-gateway:
+    image: api-gateway:latest
+    container_name: api-gateway
+    hostname: api-gateway
+    restart: always
+    expose:
+      - "8123"
+    ports:
+      - "8123:8123"
+
+  random-number-ui:
+    image: random-number-ui:latest
+    container_name: random-number-ui
+    restart: always
+    depends_on:
+      - eureka-server
+    ports:
+      - "8081:8081"
+
